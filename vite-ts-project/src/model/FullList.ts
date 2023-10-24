@@ -21,33 +21,40 @@ export default class FullList implements List {
     return this._list;
   }
 
-  // set list(value: ListItem[]) {
-  //   this._list = value;
-  // }
-
   load(): void {
-    const list = localStorage.getItem("myList");
-    if (list) {
-      this.list = JSON.parse(list);
-    }
+    const storedList: string | null = localStorage.getItem("myList");
+    if (typeof storedList !== "string") return;
+
+    const parsedList: { _id: string; _item: string; _checked: boolean }[] =
+      JSON.parse(storedList);
+
+    parsedList.forEach((item) => {
+      const listItem: ListItem = new ListItem(
+        item._id,
+        item._item,
+        item._checked
+      );
+      // Using FullList.instance instead of this.instance because of the static definition
+      FullList.instance.addItem(listItem);
+    });
   }
 
   save(): void {
-    localStorage.setItem("myList", JSON.stringify(this.list));
+    localStorage.setItem("myList", JSON.stringify(this._list));
   }
 
   clearList(): void {
-    this.list = [];
+    this._list = [];
     this.save();
   }
 
   addItem(itemObj: ListItem): void {
-    this.list.push(itemObj);
+    this._list.push(itemObj);
     this.save();
   }
 
   removeItem(id: string): void {
-    this.list = this.list.filter((item) => item.id !== id);
+    this._list = this._list.filter((item) => item.id !== id);
     this.save();
   }
 }
