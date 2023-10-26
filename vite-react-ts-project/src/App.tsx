@@ -1,7 +1,11 @@
 import Heading from "./components/Heading";
 import Section from "./components/Section";
-import Counter from "./components/Counter";
+import PropsCounter from "./components/PropsCounter";
 import List from "./components/List";
+import Counter from "./components/Counter";
+import CounterUseReducer from "./components/CounterUseReducer";
+import { CounterContextProvider } from "./context/CounterContext";
+import { initialState } from "./context/CounterContext";
 
 import { useCallback, useState, useMemo, useRef } from "react";
 import { useEffect } from "react";
@@ -54,12 +58,23 @@ function App() {
 
   return (
     <>
+      <CounterContextProvider
+        count={initialState.count}
+        text={initialState.text}
+      >
+        <>
+          <CounterUseReducer>
+            {(num: number) => <>Count useReducer is: {num}</>}
+          </CounterUseReducer>
+        </>
+      </CounterContextProvider>
       <Heading title={"Hello!"} />
       <h1>{result}</h1>
       <input ref={inputRef} type="text" />
       <Section title={"Props Title"}>Anything for the children</Section>
-      <Counter setCount={setCount}>Count is {count}</Counter>
+      <PropsCounter setCount={setCount}>PropsCount is {count}</PropsCounter>
       <button onClick={addTwo}>Add two</button>
+      <Counter />
       <List
         items={["a", "b", "c"]}
         render={(item) => <span className="gold">{item}</span>}
