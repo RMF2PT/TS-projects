@@ -47,12 +47,12 @@ img {
   gap: 1rem;
 }
 
-.main--products {
+.main__products {
   flex-flow: row wrap;
   justify-content: space-between;
 }
 
-.main--cart {
+.main__cart {
   flex-flow: column nowrap;
 }
 
